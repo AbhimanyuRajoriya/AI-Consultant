@@ -319,8 +319,8 @@ def get_auth_config():
     return {
         "COGNITO_DOMAIN": os.getenv("COGNITO_DOMAIN"),
         "CLIENT_ID": os.getenv("COGNITO_APP_CLIENT_ID"),
-        "REDIRECT_URI": f"{os.getenv('FRONTEND_URL')}/callback.html",
-        "LOGOUT_URI": f"{os.getenv('FRONTEND_URL')}/index.html"
+        "REDIRECT_URI": f"{os.getenv('COGNITO_REDIRECT_URI')}",
+        "LOGOUT_URI": f"{os.getenv('COGNITO_LOGOUT_URI')}"
     }
 
 
