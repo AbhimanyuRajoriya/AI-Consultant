@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geo:ital@0;1&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/predict.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .dashboard-layout {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .dashboard-top {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 20px;
+    }
+
+    .dashboard-card {
+      background: white;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .card-heading {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #636363;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-score {
+      font-size: clamp(48px, 8vw, 72px);
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1;
+      margin: 10px 0 14px;
+    }
+
+    .dashboard-meta {
+      font-size: 14px;
+      color: #636363;
+      margin-top: 10px;
+    }
+
+    .risk-low {
+      background-color: #d9f7d9;
+      border: 1px solid #1a1a1a;
+      color: #145214;
+    }
+
+    .risk-medium {
+      background-color: #fff1b8;
+      border: 1px solid #1a1a1a;
+      color: #6b4f00;
+    }
+
+    .risk-high {
+      background-color: #ffd6d6;
+      border: 1px solid #1a1a1a;
+      color: #7a1111;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      border: 1px solid #dcdcdc;
+      background: #fafafa;
+      padding: 16px 14px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #636363;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+
+    .message-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border: 1px solid #d4d4d4;
+      background: #fafafa;
+      color: #2a2a2a;
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-top,
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="back-button-container">
+    <button class="back-button" onclick="location.href='index.html'">← Back to Home</button>
+  </div>
+
+  <div class="main-container" style="max-width: 1200px;">
+    <div class="left-section" style="max-width: 100%; width: 100%;">
+      <h2>Dashboard</h2>
+      <p class="subtitle">Your latest prediction, history, and model insights</p>
+
+      <button class="submit-button" id="refreshBtn">Refresh Dashboard</button>
+
+      <div class="message-box" id="messageBox"></div>
+
+      <div class="dashboard-layout" id="dashboardContent">
+        <div class="dashboard-top">
+          <div class="dashboard-card">
+            <div class="card-heading">Latest Score</div>
+            <div class="dashboard-score" id="latestScore">--</div>
+            <div class="score-badge" id="latestRisk">--</div>
+            <div class="dashboard-meta" id="latestMeta">Updated: --</div>
+          </div>
+
+          <div class="dashboard-card">
+            <div class="card-heading">Latest Inputs</div>
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-label">Study Hours</div>
+                <div class="stat-value" id="studyHours">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Attendance</div>
+                <div class="stat-value" id="attendance">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Sleep</div>
+                <div class="stat-value" id="sleepHours">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Mental Health</div>
+                <div class="stat-value" id="mentalHealth">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Screen Time</div>
+                <div class="stat-value" id="screenTime">--</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Diet</div>
+                <div class="stat-value" id="dietQuality">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="dashboard-card">
+            <div class="card-heading">Score History</div>
+            <div class="chart-wrap">
+              <canvas id="historyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <div class="card-heading">Feature Importance</div>
+            <div class="chart-wrap">
+              <canvas id="importanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-heading">Model Metrics</div>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Model</div>
+              <div class="stat-value" id="modelName" style="font-size:18px;">--</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">MAE</div>
+              <div class="stat-value" id="maeValue">--</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">RMSE</div>
+              <div class="stat-value" id="rmseValue">--</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">R²</div>
+              <div class="stat-value" id="r2Value">--</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">History Count</div>
+              <div class="stat-value" id="historyCount">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+## Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+## Packaging / build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+
+## Virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+## Environment files
+.env
+.env.*
+!.env.example
+
+## Logs & coverage
+*.log
+.cache/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+
+## Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+
+## Jupyter
+.ipynb_checkpoints/
+
+## Editors/OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+## Node (front-end static assets)
+node_modules/
+
+## Docker
+.docker/
+.tmp/

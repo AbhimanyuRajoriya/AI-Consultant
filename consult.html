@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consult AI</title>
+  <link rel="stylesheet" href="css/consult.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geo:ital@0;1&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="back-button-container">
+    <button class="back-button" onclick="location.href='index.html'">← Back to Home</button>
+  </div>
+
+  <div class="container">
+    <div class="glitch-overlay"></div>
+
+    <div class="chat-header">
+      <div class="chat-title">
+        <h1>AI Consultant</h1>
+      </div>
+    </div>
+
+    <div class="start-section" id="startSection">
+      <div class="start-box">
+        <h2 class="start-title">Welcome</h2>
+        <p class="start-subtitle">Start your personalized consultation (login required)</p>
+        <button class="start-btn" id="startBtn">Start Chat</button>
+      </div>
+    </div>
+
+    <div class="chat-section" id="chatSection" style="display: none;">
+      <div class="chat-body" id="chatBox">
+        <div class="typing-indicator" id="typingIndicator">
+          <span class="typing-text">Thinking</span>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-footer">
+        <div class="message-form">
+          <input type="text" class="message-input" id="userInput" placeholder="Type your question...">
+          <button class="send-btn" id="sendBtn">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/consult.js"></script>
+</body>
+</html>
