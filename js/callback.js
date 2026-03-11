@@ -18,10 +18,13 @@ if (!data.id_token) {
   document.body.innerHTML = "<h3>Login failed: no id_token received.</h3>";
 } else {
   localStorage.setItem("id_token", data.id_token);
-  if (data.access_token) localStorage.setItem("access_token", data.access_token);
+
+  if (data.access_token) {
+    localStorage.setItem("access_token", data.access_token);
+  }
 
   const exp = Date.now() + (parseInt(data.expires_in || "3600", 10) * 1000);
   localStorage.setItem("token_exp", String(exp));
 
-  window.location.href = `${window.location.origin}/index.html`;
+  window.location.href = `${window.location.origin}/AI-Consultant/index.html`;
 }
