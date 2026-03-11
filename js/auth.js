@@ -1,79 +1,47 @@
-let CONFIG = null;
-
-async function loadConfig() {
-  if (CONFIG) return CONFIG;
-
-  try {
-    const res = await fetch(`${window.API_BASE}/auth/config`);
-
-    if (!res.ok) {
-      throw new Error(`Config fetch failed: ${res.status}`);
-    }
-
-    CONFIG = await res.json();
-    console.log("Loaded config:", CONFIG);
-    return CONFIG;
-  } catch (err) {
-    console.error("Failed to load auth config:", err);
-    alert("Login config could not be loaded. Check backend URL and HTTPS setup.");
-    throw err;
-  }
-}
+const CONFIG = {
+  COGNITO_DOMAIN: "https://us-east-1dwpegiyop.auth.us-east-1.amazoncognito.com",
+  CLIENT_ID: "2bsg8fgsbuked557t3op6kr5i0",
+  REDIRECT_URI: "https://AbhimanyuRajoriya.github.io/AI-Consultant/callback.html",
+  LOGOUT_URI: "https://AbhimanyuRajoriya.github.io/AI-Consultant/index.html"
+};
 
 function isLoggedIn() {
   return !!localStorage.getItem("id_token");
 }
 
-async function login() {
-  try {
-    const cfg = await loadConfig();
+function login() {
+  const url =
+    `${CONFIG.COGNITO_DOMAIN}/login` +
+    `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
+    `&response_type=token` +
+    `&scope=${encodeURIComponent("openid email")}` +
+    `&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}`;
 
-    const url =
-      `${cfg.COGNITO_DOMAIN}/login` +
-      `?client_id=${encodeURIComponent(cfg.CLIENT_ID)}` +
-      `&response_type=token` +
-      `&scope=${encodeURIComponent("openid email")}` +
-      `&redirect_uri=${encodeURIComponent(cfg.REDIRECT_URI)}`;
-
-    console.log("Redirecting to:", url);
-    window.location.href = url;
-  } catch (err) {
-    console.error("Login failed:", err);
-  }
+  console.log("Redirecting to:", url);
+  window.location.href = url;
 }
 
-async function logout() {
-  try {
-    const cfg = await loadConfig();
+function logout() {
+  localStorage.removeItem("id_token");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("token_exp");
+  localStorage.removeItem("home_latest_prediction");
+  localStorage.removeItem("home_prediction_history");
 
-    localStorage.removeItem("id_token");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("token_exp");
-    localStorage.removeItem("home_latest_prediction");
-    localStorage.removeItem("home_prediction_history");
+  const url =
+    `${CONFIG.COGNITO_DOMAIN}/logout` +
+    `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
+    `&logout_uri=${encodeURIComponent(CONFIG.LOGOUT_URI)}`;
 
-    const url =
-      `${cfg.COGNITO_DOMAIN}/logout` +
-      `?client_id=${encodeURIComponent(cfg.CLIENT_ID)}` +
-      `&logout_uri=${encodeURIComponent(cfg.LOGOUT_URI)}`;
-
-    window.location.href = url;
-  } catch (err) {
-    console.error("Logout failed:", err);
-  }
+  window.location.href = url;
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  if (loginBtn) {
-    loginBtn.addEventListener("click", login);
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", logout);
-  }
+  if (loginBtn) loginBtn.addEventListener("click", login);
+  if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
   if (loginBtn && logoutBtn) {
     if (isLoggedIn()) {
