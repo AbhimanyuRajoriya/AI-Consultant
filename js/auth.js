@@ -1,3 +1,5 @@
+console.log("TOP OF auth.js loaded");
+
 const CONFIG = {
   COGNITO_DOMAIN: "https://us-east-1dwpegiyop.auth.us-east-1.amazoncognito.com",
   CLIENT_ID: "2bsg8fgsbuked557t3op6kr5i0",
@@ -41,30 +43,29 @@ function logout() {
   window.location.href = url;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("auth.js loaded");
+window.login = login;
+window.logout = logout;
 
-  const loginBtn = document.getElementById("loginBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-  console.log("loginBtn:", loginBtn);
-  console.log("logoutBtn:", logoutBtn);
+console.log("loginBtn found:", loginBtn);
+console.log("logoutBtn found:", logoutBtn);
 
-  if (loginBtn) {
-    loginBtn.onclick = login;
+if (loginBtn) {
+  loginBtn.onclick = login;
+}
+
+if (logoutBtn) {
+  logoutBtn.onclick = logout;
+}
+
+if (loginBtn && logoutBtn) {
+  if (isLoggedIn()) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
+  } else {
+    logoutBtn.style.display = "none";
+    loginBtn.style.display = "inline-block";
   }
-
-  if (logoutBtn) {
-    logoutBtn.onclick = logout;
-  }
-
-  if (loginBtn && logoutBtn) {
-    if (isLoggedIn()) {
-      loginBtn.style.display = "none";
-      logoutBtn.style.display = "inline-block";
-    } else {
-      logoutBtn.style.display = "none";
-      loginBtn.style.display = "inline-block";
-    }
-  }
-});
+}
