@@ -10,6 +10,8 @@ function isLoggedIn() {
 }
 
 function login() {
+  console.log("Login button clicked");
+
   const url =
     `${CONFIG.COGNITO_DOMAIN}/login` +
     `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
@@ -17,11 +19,13 @@ function login() {
     `&scope=${encodeURIComponent("openid email")}` +
     `&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}`;
 
-  console.log("Redirecting to:", url);
+  console.log("Redirect URL:", url);
   window.location.href = url;
 }
 
 function logout() {
+  console.log("Logout button clicked");
+
   localStorage.removeItem("id_token");
   localStorage.removeItem("access_token");
   localStorage.removeItem("token_exp");
@@ -33,15 +37,26 @@ function logout() {
     `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
     `&logout_uri=${encodeURIComponent(CONFIG.LOGOUT_URI)}`;
 
+  console.log("Logout URL:", url);
   window.location.href = url;
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  console.log("auth.js loaded");
+
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  if (loginBtn) loginBtn.addEventListener("click", login);
-  if (logoutBtn) logoutBtn.addEventListener("click", logout);
+  console.log("loginBtn:", loginBtn);
+  console.log("logoutBtn:", logoutBtn);
+
+  if (loginBtn) {
+    loginBtn.onclick = login;
+  }
+
+  if (logoutBtn) {
+    logoutBtn.onclick = logout;
+  }
 
   if (loginBtn && logoutBtn) {
     if (isLoggedIn()) {
