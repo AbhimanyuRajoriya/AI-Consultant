@@ -341,3 +341,7 @@ def auth_debug():
         "ISSUER": issuer,
         "JWKS_URL": jwks,
     }
+from fastapi import Request
+@app.options("/{full_path:path}")
+async def preflight_handler(request: Request):
+    return {}
