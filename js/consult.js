@@ -58,7 +58,7 @@ function appendMessage(sender, message) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-startBtn.addEventListener("click", async function () {
+async function startSession() {
   if (!requireAuth()) return;
 
   try {
@@ -90,18 +90,10 @@ startBtn.addEventListener("click", async function () {
     chatSection.style.display = "flex";
     appendMessage("ai", "Consultation started. Ask your questions.");
   } catch (err) {
+    console.error("Start session error:", err);
     alert("Server error");
-    console.error(err);
   }
-});
-
-sendBtn.addEventListener("click", sendMessage);
-
-userInput.addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
-});
+}
 
 async function sendMessage() {
   const message = userInput.value.trim();
@@ -157,3 +149,25 @@ async function sendMessage() {
     appendMessage("ai", "Error contacting consultant");
   }
 }
+
+if (startBtn) {
+  startBtn.addEventListener("click", startSession);
+}
+
+if (sendBtn) {
+  sendBtn.addEventListener("click", sendMessage);
+}
+
+if (userInput) {
+  userInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+}
+
+console.log("consult.js loaded");
+console.log("appendMessage type:", typeof appendMessage);
+console.log("startBtn found:", !!startBtn);
+console.log("sendBtn found:", !!sendBtn);
+console.log("userInput found:", !!userInput);
