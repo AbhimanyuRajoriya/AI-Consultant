@@ -73,47 +73,37 @@ async function sendMessage() {
 
   try {
     const headers = authHeaders();
+
     const res = await fetch(`${window.API_BASE}/chat`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ session_id: sessionId, question: message })
+      body: JSON.stringify({
+        session_id: sessionId,
+        question: message
+      })
     });
 
-    const data = await res.json();
+    const raw = await res.text();
+    console.log("Raw /chat response:", raw);
+
+    let data = {};
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      throw new Error("Invalid JSON from /chat: " + raw);
+    }
 
     typingIndicator.classList.remove("active");
+
     if (!res.ok) {
       appendMessage("ai", data.detail || "Error contacting consultant");
       return;
     }
 
-    appendMessage("ai", data.answer);
+    appendMessage("ai", data.answer || "No answer returned");
   } catch (err) {
     typingIndicator.classList.remove("active");
+    console.error("Chat error:", err);
     appendMessage("ai", "Error contacting consultant");
   }
-}
-
-function appendMessage(sender, message) {
-  const msgDiv = document.createElement("div");
-  msgDiv.className = `message ${sender}-message`;
-
-  const senderSpan = document.createElement("div");
-  senderSpan.className = "message-sender";
-  senderSpan.textContent = sender === "ai" ? "AI Consultant" : "You";
-
-  const contentDiv = document.createElement("div");
-  contentDiv.className = "message-content";
-  contentDiv.textContent = message;
-
-  const timestamp = document.createElement("div");
-  timestamp.className = "timestamp";
-  timestamp.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-  msgDiv.appendChild(senderSpan);
-  msgDiv.appendChild(contentDiv);
-  msgDiv.appendChild(timestamp);
-
-  chatBox.appendChild(msgDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
