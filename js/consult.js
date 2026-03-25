@@ -18,7 +18,7 @@ function authHeaders() {
 
   return {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`
+    "Authorization": "Bearer " + token
   };
 }
 
@@ -29,6 +29,33 @@ function requireAuth() {
     return false;
   }
   return true;
+}
+
+function appendMessage(sender, message) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = "message " + sender + "-message";
+
+  const senderSpan = document.createElement("div");
+  senderSpan.className = "message-sender";
+  senderSpan.textContent = sender === "ai" ? "AI Consultant" : "You";
+
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content";
+  contentDiv.textContent = message;
+
+  const timestamp = document.createElement("div");
+  timestamp.className = "timestamp";
+  timestamp.textContent = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  msgDiv.appendChild(senderSpan);
+  msgDiv.appendChild(contentDiv);
+  msgDiv.appendChild(timestamp);
+
+  chatBox.appendChild(msgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 startBtn.addEventListener("click", async function () {
@@ -64,7 +91,7 @@ startBtn.addEventListener("click", async function () {
     appendMessage("ai", "Consultation started. Ask your questions.");
   } catch (err) {
     alert("Server error");
-    console.error("Start session error:", err);
+    console.error(err);
   }
 });
 
@@ -129,31 +156,4 @@ async function sendMessage() {
     console.error("Chat error:", err);
     appendMessage("ai", "Error contacting consultant");
   }
-}
-
-function appendMessage(sender, message) {
-  const msgDiv = document.createElement("div");
-  msgDiv.className = "message " + sender + "-message";
-
-  const senderSpan = document.createElement("div");
-  senderSpan.className = "message-sender";
-  senderSpan.textContent = sender === "ai" ? "AI Consultant" : "You";
-
-  const contentDiv = document.createElement("div");
-  contentDiv.className = "message-content";
-  contentDiv.textContent = message;
-
-  const timestamp = document.createElement("div");
-  timestamp.className = "timestamp";
-  timestamp.textContent = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  msgDiv.appendChild(senderSpan);
-  msgDiv.appendChild(contentDiv);
-  msgDiv.appendChild(timestamp);
-
-  chatBox.appendChild(msgDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
