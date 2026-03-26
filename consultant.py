@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from consultant_dataset import consultation_data
 
-model = SentenceTransformer("all-mpnet-base-v2")
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 patterns = [item["pattern"] for item in consultation_data]
 responses = [item["response"] for item in consultation_data]
