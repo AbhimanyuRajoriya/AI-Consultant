@@ -38,15 +38,7 @@ This system focuses on **practical AI implementation**, not just theory.
 ---
 
 ## 🏗️ System Architecture
-Frontend (HTML/CSS/JS)
-↓
-FastAPI Backend (Python)
-↓
-ML Model + NLP Engine
-↓
-PostgreSQL (Supabase)
-↓
-AWS Services (Cognito, EC2, CloudFront)
+Frontend (HTML/CSS/JS) → FastAPI Backend (Python) → ML Model + NLP Engine → PostgreSQL (Supabase) → AWS Services (Cognito, EC2, CloudFront)
 
 ---
 
