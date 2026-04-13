@@ -20,15 +20,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # If your frontend is plain HTML/CSS/JS and does not need a build step,
-      # you can remove npm steps and just upload the root folder or your frontend folder.
-
+    
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+    
+      - name: Check JS syntax
+        run: |
+          find . -name "*.js" -exec node --check {} \;
+    
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
