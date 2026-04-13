@@ -6,6 +6,8 @@ const comparisonText = document.getElementById("comparisonText");
 const resultPlaceholder = document.getElementById("resultPlaceholder");
 const resultContent = document.getElementById("resultContent");
 
+const = ;
+
 function getToken() {
   return localStorage.getItem("id_token");
 }
