@@ -1,5 +1,4 @@
 let homeHistoryChart = null;
-const x =
 function getToken() {
   return localStorage.getItem("id_token");
 }
