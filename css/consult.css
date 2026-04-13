@@ -79,6 +79,7 @@ body {
 .back-button:active:after {
     top: 0px;
     left: 0px;
+    color: red
 }
 
 .container {
